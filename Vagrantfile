@@ -6,14 +6,20 @@ Vagrant.configure("2") do |config|
     master.vm.synced_folder "pillar/", "/srv/pillar"
     master.vm.network "private_network", ip: "192.168.137.11"
     master.vm.provision :salt do |salt|
-      salt.install_master = true
-      salt.no_minion = true
       salt.run_highstate = false
+      salt.install_master = true
       salt.master_config = "cfg/master"
+      salt.minion_config = "cfg/minion"
       salt.master_key = "pki/master.pem"
       salt.master_pub = "pki/master.pub"
-      salt.seed_master = { "minion" => "pki/minion.pub" }
+      salt.minion_key = "pki/master.pem"
+      salt.minion_pub = "pki/master.pub"
+      salt.seed_master = {
+        "master" => "pki/master.pub",
+        "minion" => "pki/minion.pub",
+      }
     end
+    master.vm.provision "shell", inline: "salt-call state.apply"
   end
   config.vm.define "minion" do |minion|
     minion.vm.host_name = "minion"
