@@ -3,5 +3,5 @@
 /tmp/{{ name }}:
   file.managed:
     - source: http://{{ opts.master }}/files/{{ name }}
-    - skip_verify: true
+    - source_hash: http://{{ opts.master }}/files/{{ name }}.hash
 {% endfor %}

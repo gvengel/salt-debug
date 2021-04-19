@@ -25,7 +25,7 @@ You might want to run each state a couple of times,
 since they will speed up once the cache is warm.
 
 Notice the `fileserver` state takes considerably longer. 
-With a warm cache it takes ~10s, where `content` and `http` only take ~1s.
+With a warm cache it takes ~10s, where `http` takes ~6s, and `content` only takes ~1s.
 
 To observe how latency compounds the problem:
 
@@ -39,8 +39,7 @@ salt minion state.apply http
 salt minion state.apply fileserver
 ```
 
-Runtime for `content` and `http` is unaffected by the latency,
-but `fileserver` jumps to ~50s.
+Now `fileserver` takes ~55s, where `http` takes ~33s, and `content` still only takes ~1s.
 
 To remove the latency, you can reboot the minion.
 ```bash
